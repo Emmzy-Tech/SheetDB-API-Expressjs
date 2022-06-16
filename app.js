@@ -17,29 +17,11 @@ app.post("/", (req, res) => {
   const email = req.body.email;
 
   //Check if the user exists
-
-  client.read({ sheet: "Sheet1" }).then(
-    function (data) {
-      const da = JSON.parse(data);
-      // console.log(data);
-      // let x = {First_Name, Last_Name, Email}
-      // da.map((x)=>{
-        
-      // })
-      da.forEach(element => {
-        
-      
-        console.log(element.First_Name);
-        const existFName = element.First_Name;
-        const existLName = element.Last_Name;
-        const existEmail = element.Email;
-        
-        switch (existEmail) { 
-          case email:
-            console.log("User Exists");
-            break;
-          default:
-            client.create({ First_Name: fName, Last_Name: lName, Email: email })
+  client.read({ search: { First_Name: fName, Last_Name: lName, Email: email } }).then(function(data){
+    const da = JSON.parse(data)
+    if (da.length === 0) {
+       console.log("No Data") 
+       client.create({ First_Name: fName, Last_Name: lName, Email: email })
               .then(
                 function (data) {
                   // const success = JSON.parse(data).created
@@ -51,28 +33,25 @@ app.post("/", (req, res) => {
                   if (err) {
                     res.sendFile(`${__dirname}/failure.html`);
                   }
-                  // console.log(err)
+                  
                 }
               );
-            break;
-
-        // if (existFName == fName && existLName == lName && existEmail == email) {
-        //   console.log("User Exists");
-        } 
-        
-      });
-    },
-    function (err) {
-      console.log(err);
+      }
+    else{
+      console.log("There is data")
+      res.sendFile(`${__dirname}/failure.html`);
     }
-  );
-
-  // function createUser(fName, lName, email){
+  },
+  function (err) {
     
-  // }
+  });
+
 });
 
 
+app.post("/failure", (req, res)=>{
+  res.redirect("/")
+})
 
 app.get("/", (req, res) => {
   res.sendFile(`${__dirname}/index.html`);

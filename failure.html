@@ -37,9 +37,11 @@
 <body class="text-center">
   <div class="jumbotron" style="margin: 0 auto;">
     <h1 class="display-4" style="color: red; font-weight: bold;">Sorry an Error Occured</h1>
-    <p class="lead">Please try again</p>
+    <p class="lead">User Exists, Please try again</p>
     <hr class="my-4">
-    <a class="btn btn-primary btn-lg" href="/" role="button" onclick="history.back()">Try Again</a>
+    <form action="/failure" method="post">
+    <button class="btn btn-primary btn-lg" role="button">Try Again</button>
+  </form>
   </div>
 </body>
 </html>
