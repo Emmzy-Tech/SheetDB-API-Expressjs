@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const sheetdb = require("sheetdb-node");
-const client = sheetdb({ address: "bpg7l00ugjlgb" });
+const client = sheetdb({ address: "API Key" });
 
 const app = express();
 const Port = 3000;
@@ -19,13 +19,21 @@ app.post("/", (req, res) => {
   //Check if the user exists
   client.read({ search: { First_Name: fName, Last_Name: lName, Email: email } }).then(function(data){
     const da = JSON.parse(data)
+    // console.log(da);
+    // const sam = da[0].First_Name
+    // console.log(sam);
+    // if(sam == fName){
+    //   console.log("User Exists")
+    // }else{
+    //   console.log("User Does not exist")
+    // }
     if (da.length === 0) {
        console.log("No Data") 
        client.create({ First_Name: fName, Last_Name: lName, Email: email })
               .then(
-                function (data) {
-                  // const success = JSON.parse(data).created
-                  if (data) {
+                function (datas) {
+                  const success = JSON.parse(datas).created
+                  if (success == 1) {
                     res.sendFile(`${__dirname}/success.html`);
                   }
                 },
